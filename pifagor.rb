@@ -16,7 +16,7 @@ if sides[0] > sides[1]
 		end
 	end
 elsif sides[0] == sides[1] && sides[1] == sides[2]
-	message = "Треугольник равносторонний"	
+	message = "Треугольник равносторонний и равнобедренный"	
 elsif sides[0] == sides[1]
 	message = "Треугольник равнобедренный"		
 end
