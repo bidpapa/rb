@@ -1,24 +1,26 @@
 puts "Введите значение первой стороны треугольника"
-first = gets.chomp
+first = gets.to_f
 puts "Введите значение второй стороны треугольника"
-second = gets.chomp
+second = gets.to_f
 puts "Введите значение третьей стороны треугольника"
-third = gets.chomp
+third = gets.to_f
 
-sides = [first.to_f, second.to_f, third.to_f].sort.reverse
-
-message = ""
-if sides[0] > sides[1]
-	if sides[0]**2 == sides[1]**2 + sides[2]**2
-		message = "Треугольник прямоугольный"
-		if sides[1] == sides[2]
-			message += " и равнобедренный"
-		end
-	end
-elsif sides[0] == sides[1] && sides[1] == sides[2]
-	message = "Треугольник равносторонний и равнобедренный"	
-elsif sides[0] == sides[1]
-	message = "Треугольник равнобедренный"		
+if first === 0.0 || second === 0.0 || third === 0.0
+	abort("Введены некорректные параметры")
 end
 
-puts message
+cathetus1, cathetus2, hypotenuse = [first, second, third].sort!
+
+right_triangle = cathetus1**2 + cathetus2**2 == hypotenuse**2
+isosceles_right_triangle = right_triangle && cathetus1 == cathetus2
+equilateral_right_triangle = cathetus1 == hypotenuse
+
+if right_triangle === true
+	puts "Прямоугольный треугольник"
+end
+if isosceles_right_triangle === true
+	puts "Прямоугольный и равнобедренный треугольник"
+end
+if equilateral_right_triangle === true
+	puts "Равносторонний и равнобедренный треугольник"
+end

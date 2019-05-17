@@ -1,8 +1,8 @@
 print "Print your name "
 name = gets.chomp
 print "Enter your height "
-height = gets.chomp
-ideal_weight = height.to_i - 110
+height = gets.to_i
+ideal_weight = height - 110
 if ideal_weight < 0
 	message = "#{name}, Your weight is already optimal"
 else 

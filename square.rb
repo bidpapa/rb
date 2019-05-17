@@ -1,6 +1,6 @@
 puts "Введите значение основания треугольника "
-base = gets.chomp
+base = gets.to_i
 puts "Введите высоту треугольника "
-height = gets.chomp
-square = 1.0/2*base.to_i*height.to_i 
+height = gets.to_i
+square = 0.5 * base * height
 puts square
