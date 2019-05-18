@@ -13,14 +13,12 @@ cathetus1, cathetus2, hypotenuse = [first, second, third].sort!
 
 right_triangle = cathetus1**2 + cathetus2**2 == hypotenuse**2
 isosceles_right_triangle = right_triangle && cathetus1 == cathetus2
-equilateral_right_triangle = cathetus1 == hypotenuse
+equilateral_triangle = cathetus1 == hypotenuse
 
-if right_triangle === true
+if right_triangle
 	puts "Прямоугольный треугольник"
-end
-if isosceles_right_triangle === true
+elsif isosceles_right_triangle
 	puts "Прямоугольный и равнобедренный треугольник"
-end
-if equilateral_right_triangle === true
+elsif equilateral_triangle
 	puts "Равносторонний и равнобедренный треугольник"
 end
