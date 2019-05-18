@@ -12,13 +12,13 @@ end
 d = b**2 - 4 * a * c
 
 if d < 0
-    puts message = "Корней нет"
-  elsif d == 0
-    x1 = (-b) / (2.0 * a)
-    puts "Дискриминант = 0, один корень = #{x1}"
-  else
-    sqrt = Math.sqrt(d)
-    x1 = (-b + sqrt) / (2.0 * a)
-    x2 = (-b - sqrt) / (2.0 * a)
-    puts "Дискриминант = #{d}, корни #{x1} и #{x2}"	
+  puts message = "Корней нет"
+elsif d == 0
+  x1 = (-b) / (2.0 * a)
+  puts "Дискриминант = 0, один корень = #{x1}"
+else
+  sqrt = Math.sqrt(d)
+  x1 = (-b + sqrt) / (2.0 * a)
+  x2 = (-b - sqrt) / (2.0 * a)
+  puts "Дискриминант = #{d}, корни #{x1} и #{x2}"	
 end

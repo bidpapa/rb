@@ -18,7 +18,7 @@ equilateral_triangle = cathetus1 == hypotenuse
 if right_triangle
   puts "Прямоугольный треугольник"
 elsif isosceles_right_triangle
-puts "Прямоугольный и равнобедренный треугольник"
+  puts "Прямоугольный и равнобедренный треугольник"
 elsif equilateral_triangle
   puts "Равносторонний и равнобедренный треугольник"
 end
