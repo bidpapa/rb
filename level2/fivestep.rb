@@ -1,8 +1,7 @@
 array = []
-numbers = (10..100)
-numbers.each { |i|
-  if i%5 == 0
-    array.push(i)
-  end
-}
+i = 10
+while i <= 100 do
+  array << i
+  i += 5
+end
 puts array

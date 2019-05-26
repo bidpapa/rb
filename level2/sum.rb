@@ -9,22 +9,20 @@ loop do
   puts "Введите количество"
   amount = gets.to_f
   
-  basket[name] = {price => amount}
-
+  basket[name] = { price: price, amount: amount }
 end
  
 sum = {}
 
-basket.each { |k,v|
-  v.each { |key,value|
-    sum[k] = key * value
-  }
-}
+basket.each do |name,value|
+  sum[name] = value[:price] * value[:amount]
+  puts "В корзине находится #{name}"  
+end
 
 total_sum = 0
 
-sum.each {  |k,v|
-  total_sum += v
+sum.each {  |name,price|
+  total_sum += price
 }
 
 puts basket

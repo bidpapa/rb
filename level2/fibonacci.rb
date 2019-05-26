@@ -1,19 +1,10 @@
-fib = 0
-array = []
-loop do    
-  if fib == 0
-    fib += 1
-    array.push(fib)
-  end
-  if fib == 1
-    array.push(fib)
-    fib += 1     
-    array.push(fib)              
-  else 
-    fib += array[-2]
-    break if fib > 100   
-    array.push(fib)
-  end    
+fibonacci = [0, 1]
+next_number = 1
+
+loop do 
+  fibonacci << next_number
+  next_number = fibonacci[-1] + fibonacci[-2]
+  break if next_number > 100
 end
 
-puts array
+puts fibonacci
