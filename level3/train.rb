@@ -1,99 +1,65 @@
-class Station
-  attr_reader :trains
-
-  def initialize(name)
-    @name = name
-    @trains = []
-    @types = []
-  end
-
-  def add_train(train)
-    @trains.push(train)
-  end
-
-  def send_train(train)
-    @trains.delete(train)
-  end
-
-  def train_types
-    @trains.each do |train|
-      @types << train.type
-    end
-
-    counts = Hash.new(0)
-    @types.each { |type| counts[type] += 1 }
-
-    puts counts
-  end
-end
-
-class Route
-  attr_reader :station
-
-  def initialize(start, finish)
-    @station = [start, finish]
-  end
-
-  def add_station(station)
-    @station.insert(-2, station)
-  end
-
-  def delete_station(station)
-    @station.delete(station)
-  end
-end
+require './route.rb'
 
 class Train
-  attr_reader :speed
-  attr_reader :wagons_count
-  attr_reader :type
-
+  attr_reader :speed, :wagons_count, :type
+  
   def initialize(number, type, wagons_count)
     @number = number
     @type = type
     @wagons_count = wagons_count
-  end
+    @speed = 0
+    @station_number = 0
+  end  
 
-  def speed=(speed)
-    @speed = speed
+  def speed(speed)
+    @speed += speed
   end
 
   def stop
     @speed = 0
+  end      
+
+  def add_wagon
+    if @speed == 0      
+      @wagons_count += 1      
+    end
   end
-    
-  def manipulate_wagons(add = true)
-    if @speed == 0
-      if add
-        @wagons_count += 1
-      elsif wagons_count > 0
-        @wagons_count -= 1
-      end  
+
+  def remove_wagon
+    if @speed == 0 && @wagons_count > 0   
+      @wagons_count -= 1      
     end
   end
 
   def set_route(route)
-    @route = route
-    @station_number = 0
-    @current_station = route.station[0]    
+    @route = route       
   end
 
-  def move(ahead = true)
-    if ahead && (@station_number + 1) != @route.station.length
+  def current_station
+    @route.stations[@station_number]
+  end
+
+  def next_station
+    @route.stations[@station_number + 1]
+  end
+
+  def previous_station
+    @route.stations[@station_number - 1]
+  end
+
+  def move_ahead
+    if @route.stations[@station_number + 1]
+      @route.stations[@station_number].send_train(self)
+      @route.stations[@station_number +1 ].add_train(self)
       @station_number += 1
-      @current_station = @route.station[@station_number]     
-      @route.station[(@station_number-1)..(@station_number+1)]
-    elsif !ahead && @station_number > 0
-      @station_number -= 1
-      @current_station = @route.station[@station_number]    
-      if @station_number > 0
-        @route.station[(@station_number-1)..(@station_number+1)]
-      else
-        @route.station[0..1]
-      end
-    else
-      "Поезд дальше не идет"
     end
   end
 
+  def move_back
+    if @route.stations[@station_number - 1] && @station_number > 0
+      @route.stations[@station_number].send_train(self)
+      @route.stations[@station_number-1].add_train(self)
+      @station_number -= 1
+    end
+  end
 end
