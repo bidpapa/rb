@@ -18,15 +18,11 @@ class Train
   end      
 
   def add_wagon
-    if @speed == 0      
-      @wagons_count += 1      
-    end
+    @wagons_count += 1 if @speed == 0   
   end
 
   def remove_wagon
-    if @speed == 0 && @wagons_count > 0   
-      @wagons_count -= 1      
-    end
+    @wagons_count -= 1 if @speed == 0 && @wagons_count > 0   
   end
 
   def set_route(route)
