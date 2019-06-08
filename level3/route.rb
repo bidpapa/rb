@@ -1,5 +1,3 @@
-require './station.rb'
-
 class Route
   attr_reader :stations
 

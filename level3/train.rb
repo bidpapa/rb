@@ -1,5 +1,3 @@
-require './route.rb'
-
 class Train
   attr_reader :speed, :wagons_count, :type
   
@@ -32,7 +30,9 @@ class Train
   end
 
   def set_route(route)
-    @route = route       
+    @route = route
+    @station_number = 0
+    current_station.add_train(self)   
   end
 
   def current_station
@@ -44,22 +44,20 @@ class Train
   end
 
   def previous_station
-    @route.stations[@station_number - 1]
+    @route.stations[@station_number - 1] if @station_number > 0
   end
 
   def move_ahead
-    if @route.stations[@station_number + 1]
-      @route.stations[@station_number].send_train(self)
-      @route.stations[@station_number +1 ].add_train(self)
-      @station_number += 1
-    end
+    return if next_station.nil?
+    current_station.send_train(self)
+    next_station.add_train(self)
+    @station_number += 1
   end
 
   def move_back
-    if @route.stations[@station_number - 1] && @station_number > 0
-      @route.stations[@station_number].send_train(self)
-      @route.stations[@station_number-1].add_train(self)
-      @station_number -= 1
-    end
+    return if previous_station.nil?
+    current_station.send_train(self)
+    previous_station.add_train(self)
+    @station_number -= 1
   end
 end

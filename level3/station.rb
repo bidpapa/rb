@@ -1,12 +1,9 @@
-require './train.rb'
-
 class Station
   attr_reader :trains
 
   def initialize(name)
     @name = name
-    @trains = []
-    @types = []
+    @trains = []   
   end
 
   def add_train(train)
@@ -17,11 +14,7 @@ class Station
     @trains.delete(train)
   end  
 
-  def train_type(type)
-    number = 0
-    @trains.select.with_index(1) do |train, index| 
-      number = index if train.type == type      
-    end
-    puts number
+  def trains_by_type(type)
+    @trains.select { |train| train.type == type }.count
   end
 end
