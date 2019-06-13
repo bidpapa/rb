@@ -18,7 +18,9 @@ class Train
   end      
 
   def add_wagon(wagon)
-    @wagons.push(wagon) if @speed == 0 && wagon.wagon_type == @type
+    return unless @speed.zero?
+    return unless attachable_wagon?(wagon)
+    @wagons << wagon
   end
 
   def remove_wagon

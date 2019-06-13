@@ -5,6 +5,10 @@ class Route
     @stations = [start, finish]
   end
 
+  def name
+    [stations.first.name, stations.last.name].join(' - ')
+  end
+
   def add_station(station)
     @stations.insert(-2, station)
   end

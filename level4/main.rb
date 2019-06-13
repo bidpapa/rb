@@ -14,24 +14,7 @@ class Main
     @stations = []
     @trains = []
     @routes = []    
-  end
-
-  def show_main_menu
-    puts "Список команд:"
-    puts "1 - добавить станции"
-    puts "2 - добавить поезда"
-    puts "3 - создать маршрут"
-    puts "4 - назначить поезду маршрут"
-    puts "5 - добавить вагон поезду"
-    puts "6 - перемещение поезда"
-    puts "7 - проверить поезда на станции"
-    puts "8 - добавить станцию на маршрут"
-    puts "9 - убрать станцию"
-    puts "10 - убрать вагон поезда"
-    puts "11 - показать список станций"
-    puts "12 - выход"
-  
-  end
+  end  
 
   def run
     loop do
@@ -48,10 +31,28 @@ class Main
       when 8 then add_station_to_route    
       when 9 then delete_station_from_route    
       when 10 then remove_train_wagon    
-      when 11 then show_stations   
-      end
-      break if command == 12
+      when 11 then show_stations(@stations)
+      when 12 then break
+      end      
     end
+  end
+
+  private
+
+  def show_main_menu
+    puts "Список команд:"
+    puts "1 - добавить станции"
+    puts "2 - добавить поезда"
+    puts "3 - создать маршрут"
+    puts "4 - назначить поезду маршрут"
+    puts "5 - добавить вагон поезду"
+    puts "6 - перемещение поезда"
+    puts "7 - проверить поезда на станции"
+    puts "8 - добавить станцию на маршрут"
+    puts "9 - убрать станцию"
+    puts "10 - убрать вагон поезда"
+    puts "11 - показать список станций"
+    puts "12 - выход"  
   end
 
   def add_stations
@@ -64,130 +65,130 @@ class Main
     puts "Введите тип создаваемого поезда. 1 - Пассажирский, 2 - Грузовой"
     train_type = gets.to_i
     puts "Введите номер поезда"
-    train_number = gets.to_i
-    @trains.push(PassengerTrain.new(train_number, 'passenger')) if train_type == 1
-    @trains.push(CargoTrain.new(train_number, 'cargo')) if train_type == 2    
+    train_number = gets.chomp
+    case train_type
+      when 1 then @trains << PassengerTrain.new(train_number)
+      when 2 then @trains << CargoTrain.new(train_number)
+    end   
   end
 
   def add_route
-    @stations.map.with_index(1) do |station, index| 
-      puts "#{index} - #{station.name}"
-    end
+    show_stations(@stations)
     puts "Введите номер станции, которую делаете стартовой в маршруте"
-    start_station_number = gets.to_i
+    start_station = select_from_collection(@stations)
     puts "Введите номер станции, которую делаете конечной в маршруте"
-    finish_station_number = gets.to_i
-    @routes.push(Route.new(@stations[start_station_number - 1], @stations[finish_station_number - 1]))
+    finish_station = select_from_collection(@stations)
+    return if start_station.nil? || finish_station.nil?
+    return if start_station == finish_station
+    @routes << Route.new(start_station, finish_station)
   end
 
   def add_station_to_route
-    @stations.map.with_index(1) do |station, index| 
-      puts "#{index} - #{station.name}"
-    end
+    show_stations(@stations)
     puts "Введите номер станции, которую добавляете в маршрут"
-    station_to_add = gets.to_i
+    station_to_add = select_from_collection(@stations)
 
-    @routes.map.with_index(1) do |route, index| 
-      puts "#{index} - #{route.stations}"
-    end
+    show_routes(@routes)
     puts "Введите номер маршрута, в который добавляете станцию"
-    selected_route = gets.to_i
+    selected_route = select_from_collection(@routes)
+    return if station_to_add.nil? || selected_route.nil?
+    return if selected_route.stations.include? station_to_add
     
-    @routes[selected_route - 1].add_station(@stations[station_to_add - 1].name)
+    selected_route.add_station(station_to_add)
   end
 
   def delete_station_from_route
-    @stations.map.with_index(1) do |station, index| 
-      puts "#{index} - #{station.name}"
-    end
-    puts "Введите номер станции, которую удаляете из маршрута"
-    station_to_del = gets.to_i
-
-    @routes.map.with_index(1) do |route, index| 
-      puts "#{index} - #{route.stations}"
-    end
+    show_routes(@routes)
     puts "Введите номер маршрута, из которого убираете станцию"
-    selected_route = gets.to_i
+    selected_route = select_from_collection(@routes)
 
-    @routes[selected_route - 1].delete_station(@stations[station_to_del - 1].name)
+    show_stations(selected_route.stations)
+    puts "Введите номер станции, которую удаляете из маршрута"
+    station_to_del = select_from_collection(selected_route.stations)    
+
+    selected_route.delete_station(station_to_del.name)
   end
     
   def add_train_route
-    @trains.map.with_index(1) do |train, index| 
-      puts "#{index} - #{train.type} (#{train.number})"
-    end
+    show_trains(@trains)
     puts "Введите номер поезда, который добавляете в маршрут"
-    selected_train = gets.to_i
+    selected_train = select_from_collection(@trains)
 
-    @routes.map.with_index(1) do |route, index| 
-      puts "#{index} - #{route.stations}"
-    end
+    show_routes(@routes)
     puts "Введите номер маршрута для поезда"
-    selected_route = gets.to_i
+    selected_route = select_from_collection(@routes)
     
-    @trains[selected_train - 1].set_route(@routes[selected_route - 1])  
+    selected_train.set_route(selected_route)  
   end
     
   def add_train_wagon
-    @trains.map.with_index(1) do |train, index| 
-      puts "#{index} - #{train.type} (#{train.number})"
-    end
+    show_trains(@trains)
     puts "Введите номер поезда, которому добавляете вагон"
-    selected_train = gets.to_i
-
-    puts @trains[selected_train - 1].type
-
-    wagon_type = CargoWagon.new if @trains[selected_train - 1].type == 'cargo'
-    wagon_type = PassengerWagon.new if @trains[selected_train - 1].type == 'passenger'
-
-    puts wagon_type
-
-    @trains[selected_train - 1].add_wagon(wagon_type)
-    puts @trains[selected_train - 1].wagons.size
+    selected_train = select_from_collection(@trains)
+    case selected_train
+    when PassengerTrain then selected_train.add_wagon(PassengerWagon.new)
+    when CargoTrain then selected_train.add_wagon(CargoWagon.new)
+    end
   end
 
   def remove_train_wagon
-    trains.map.with_index(1) do |train, index| 
-      puts "#{index} - #{train.type} (#{train.number})"
-    end
+    show_trains(@trains)
     puts "Введите номер поезда, который добавляете в маршрут"
-    selected_train = gets.to_i
-
-    @trains[selected_train - 1].remove_wagon
-    puts @trains[selected_train - 1].wagons.size
+    selected_train = select_from_collection(@trains)
+    selected_train.remove_wagon
+    puts selected_train.wagons.size
   end
    
   def move_train
     loop do
-      @trains.map.with_index(1) do |train, index| 
-      puts "#{index} - #{train.type} (#{train.number})"
-      end
+      show_trains(@trains)
       puts "Введите номер поезда, который будет перемещен"
-      selected_train = gets.to_i
+      selected_train = select_from_collection(@trains)
 
-      puts "Введите ahead для движения вперед. Введите back для движения назад. stop - завершить"
-      direction = gets.chomp
-      break if direction == 'stop' 
-
-      @trains[selected_train - 1].move_ahead if direction == 'ahead'
-      @trains[selected_train - 1].move_back if direction == 'back'
+      puts "1 - Вперед"
+      puts "2 - Назад"
+      puts "0 - прервать движение"
+      direction = gets.to_i
+      case direction
+      when 1 then selected_train.move_ahead
+      when 2 then selected_train.move_back
+      when 0 then break
+      end       
     end   
   end
 
   def check_station_trains
-    @stations.map.with_index(1) do |station, index| 
-      puts "#{index} - #{station.name}"
-    end
+    show_stations(@stations)
     puts "Введите номер станции, чтобы проверить поезда на ней"
-    selected_station = gets.to_i
+    selected_station = select_from_collection(@stations)
 
-    puts "Поездов тут нет" if @stations[selected_station - 1].trains.empty?
+    puts "Поездов тут нет" if selected_station.trains.empty?
 
-    puts @stations[selected_station - 1].trains
+    puts selected_station.trains
   end
 
-  def show_stations
-    @stations.each {|station| puts station.name}    
+  def show_stations(collection)
+    collection.each.with_index(1) do |item, index|
+      puts "#{index} - #{item.name}"
+    end
+  end
+
+  def show_trains(collection)
+    collection.each.with_index(1) do |item, index|
+      puts "#{index} - #{item.type} (#{item.number})"
+    end
+  end
+
+  def show_routes(collection)
+    collection.each.with_index(1) do |item, index|
+      puts "#{index} - #{item.name}"
+    end
+  end
+
+  def select_from_collection(collection)
+    index = gets.to_i - 1
+    return if index.negative?
+    collection[index]
   end
 
 end
