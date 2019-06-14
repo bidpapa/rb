@@ -24,7 +24,7 @@ class Train
   end
 
   def remove_wagon
-    @wagons.slice!(-1) if @speed == 0 && @wagons.size > 0   
+    @wagons.pop if @speed == 0
   end
 
   def set_route(route)

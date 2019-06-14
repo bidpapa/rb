@@ -67,8 +67,8 @@ class Main
     puts "Введите номер поезда"
     train_number = gets.chomp
     case train_type
-      when 1 then @trains << PassengerTrain.new(train_number)
-      when 2 then @trains << CargoTrain.new(train_number)
+    when 1 then @trains << PassengerTrain.new(train_number)
+    when 2 then @trains << CargoTrain.new(train_number)
     end   
   end
 
@@ -164,7 +164,7 @@ class Main
 
     puts "Поездов тут нет" if selected_station.trains.empty?
 
-    puts selected_station.trains
+    show_trains(selected_station.trains)
   end
 
   def show_stations(collection)
